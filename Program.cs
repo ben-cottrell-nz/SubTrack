@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SubscriptionDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnections")));
-// builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddCors(options =>
 {
@@ -38,39 +37,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowLocalhost");
 
-// var subscriptions = new List<Subscription>
-// {
-//     new Subscription
-//     {
-//         Id = 1,
-//         Name = "Gym Membership",
-//         Cost = 22.1m,
-//         Cycle = Subscription.BillingCycle.Weekly,
-//         RenewalDate = DateTime.Now.AddDays(7)
-//     },
-//     new Subscription
-//     {
-//         Id = 2,
-//         Name = "Mobile Plan",
-//         Cost = 8.0m,
-//         Cycle = Subscription.BillingCycle.Monthly,
-//         RenewalDate = DateTime.Now.AddMonths(1)
-//     },
-//     new Subscription
-//     {
-//         Id = 3,
-//         Name = "Google Gemini",
-//         Cost = 37.0m,
-//         Cycle = Subscription.BillingCycle.Monthly,
-//         RenewalDate = DateTime.Now.AddMonths(1)
-//     },
-// };
-
 app.MapGet("/", () => "SubTrack API");
 
 app.MapGet("/subs", async (SubscriptionDbContext context) =>
 {
-    // return subscriptions;
     return await context.Subscriptions.ToListAsync();
 });
 
