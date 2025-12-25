@@ -1,11 +1,28 @@
-function Subscription() {
-    
+interface SubscriptionProps {
+	subscription: {
+		id: number
+		name: string
+		cost: number
+		cycle: string
+		renewalDate: string
+	}
+}
 
-    return (
-        <div>
-            <h2>Subscription</h2>
-        </div>
-    )
+function Subscription({ subscription }: SubscriptionProps) {
+	return (
+		<tr>
+			<td>{subscription.name}</td>
+			<td>{subscription.cost}</td>
+			<td>{subscription.cycle}</td>
+			<td>{subscription.renewalDate}</td>
+			<td>
+				<button>Edit</button>
+			</td>
+			<td>
+				<button>Delete</button>
+			</td>
+		</tr>
+	)
 }
 
 export default Subscription
