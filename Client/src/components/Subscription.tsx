@@ -9,11 +9,17 @@ interface SubscriptionProps {
 }
 
 function Subscription({ subscription }: SubscriptionProps) {
+	const cycleMap: { [key: string]: string } = {
+		0: 'Weekly',
+		1: 'Monthly',
+		2: 'Yearly',
+	}
+
 	return (
 		<tr>
 			<td>{subscription.name}</td>
-			<td>{subscription.cost}</td>
-			<td>{subscription.cycle}</td>
+			<td>${subscription.cost}</td>
+			<td>{cycleMap[subscription.cycle]}</td>
 			<td>{new Date(subscription.renewalDate).toLocaleDateString()}</td>
 			<td>
 				<button>Edit</button>
