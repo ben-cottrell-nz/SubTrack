@@ -4,11 +4,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SubscriptionDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnections")));
 
+var clientUrl = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? new string[] { "http://localhost:5173" };
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins(clientUrl)
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
