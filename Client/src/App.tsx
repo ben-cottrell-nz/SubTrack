@@ -1,12 +1,28 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Subscription from './components/Subscription'
 import './App.css'
 
+interface Subscription {
+  id: number
+  name: string
+  cost: number
+  cycle: string
+  renewalDate: string
+}
+
 function App() {  
-  const [subs, setSubs] = useState([
-    { id: 1, name: 'Netflix', cost: 13.99, cycle: 'Monthly', renewalDate: '2024-07-15' },
-    { id: 2, name: 'Spotify', cost: 9.99, cycle: 'Monthly', renewalDate: '2024-07-20' }
-  ])
+  const [subs, setSubs] = useState<Subscription[]>([])
+
+  useEffect(() => {
+    // Fetch subscriptions from backend API
+    fetch('http://localhost:5123/subs')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched subscriptions:', data)
+        setSubs(data)
+      })
+      .catch(error => console.error('Error fetching subscriptions:', error))
+  }, [])
 
   return (
     <>
@@ -15,9 +31,9 @@ function App() {
         <table>
           <thead>
             <tr>
-              <th>Service</th>
-              <th>Plan</th>
-              <th>Price</th>
+              <th>Name</th>
+              <th>Cost</th>
+              <th>Cycle</th>
               <th>Renewal Date</th>
             </tr>
           </thead>
