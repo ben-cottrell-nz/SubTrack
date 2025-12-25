@@ -14,8 +14,8 @@ function App() {
   const [subs, setSubs] = useState<Subscription[]>([])
 
   useEffect(() => {
-    // Fetch subscriptions from backend API
-    fetch('http://localhost:5123/subs')
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5123/subs'
+    fetch(apiUrl)
       .then(response => response.json())
       .then(data => {
         console.log('Fetched subscriptions:', data)
@@ -33,7 +33,7 @@ function App() {
             <tr>
               <th>Name</th>
               <th>Cost</th>
-              <th>Cycle</th>
+              <th>Billing Cycle</th>
               <th>Renewal Date</th>
             </tr>
           </thead>
