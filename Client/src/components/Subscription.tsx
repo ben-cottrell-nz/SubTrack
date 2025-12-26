@@ -6,9 +6,10 @@ interface SubscriptionProps {
 		cycle: string
 		renewalDate: string
 	}
+	deleteSubscription: (id: number) => void
 }
 
-function Subscription({ subscription }: SubscriptionProps) {
+function Subscription({ subscription, deleteSubscription }: SubscriptionProps) {
 	const cycleMap: { [key: string]: string } = {
 		0: 'Weekly',
 		1: 'Monthly',
@@ -25,7 +26,7 @@ function Subscription({ subscription }: SubscriptionProps) {
 				<button>Edit</button>
 			</td>
 			<td>
-				<button>Delete</button>
+				<button onClick={() => deleteSubscription(subscription.id)}>Delete</button>
 			</td>
 		</tr>
 	)

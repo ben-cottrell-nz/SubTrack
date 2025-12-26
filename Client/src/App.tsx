@@ -8,13 +8,16 @@ interface Subscription {
   cost: number
   cycle: string
   renewalDate: string
+  deleteSubscription?: (id: number) => void
+  editSubscription?: (id: number) => void
 }
 
 function App() {  
   const [subs, setSubs] = useState<Subscription[]>([])
 
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5123/subs'
+
   useEffect(() => {
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5123/subs'
     fetch(apiUrl)
       .then(response => response.json())
       .then(data => {
@@ -23,6 +26,17 @@ function App() {
       })
       .catch(error => console.error('Error fetching subscriptions:', error))
   }, [])
+
+  function deleteSubscription(id: number) {
+    setSubs(subs.filter(sub => sub.id !== id))
+    fetch(`${apiUrl}/${id}`, {
+      method: 'DELETE',
+    }).then(response => {
+      if (!response.ok) {
+          console.error('Error deleting subscription with ID:', id)
+      }
+    })
+  }
 
   return (
     <>
@@ -39,7 +53,7 @@ function App() {
           </thead>
           <tbody>
             {subs.map(sub => (
-              <Subscription key={sub.id} subscription={sub} />
+              <Subscription key={sub.id} subscription={sub} deleteSubscription={deleteSubscription} />
             ))}
           </tbody>
         </table>
