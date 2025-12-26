@@ -74,6 +74,27 @@ function App() {
             {subs.map(sub => (
               <Subscription key={sub.id} subscription={sub} deleteSubscription={deleteSubscription} editSubscription={editSubscription} />
             ))}
+            <tr>
+              <td>
+                <input type="text" placeholder="New Subscription Name" />
+              </td>
+              <td>
+                <input type="number" placeholder="Cost" />
+              </td>
+              <td>
+                <select>
+                  <option value="0">Weekly</option>
+                  <option value="1">Monthly</option>
+                  <option value="2">Yearly</option>
+                </select>
+              </td>
+              <td>
+                <input type="date" />
+              </td>
+              <td>
+                <button>Add Subscription</button>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
