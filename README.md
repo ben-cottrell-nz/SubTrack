@@ -1,74 +1,109 @@
 # SubTrack
 
-SubTrack is a simple and efficient ASP.NET Core Web API designed to help users track their recurring subscriptions. It allows you to manage subscription details, costs, and renewal cycles using a lightweight SQLite database.
+SubTrack is a full-stack subscription tracking application designed to help users manage their recurring expenses efficiently. It features a high-performance **ASP.NET Core Web API** backend with smart renewal logic and a modern, interactive **React (TypeScript)** frontend.
 
-## Features
+## ✨ Key Features
 
-* **Subscription Management**: Create, view, and delete subscriptions.
-* **Flexible Billing Cycles**: Supports Weekly, Monthly, and Yearly billing cycles.
-* **Automatic Renewal Calculation**: Automatically calculates the next renewal date based on the selected cycle when a subscription is added.
-* **RESTful API**: Built with ASP.NET Core Minimal APIs for high performance and low overhead.
-* **OpenAPI Support**: Integrated NSwag for interactive API documentation (Swagger UI).
-* **Database**: Uses Entity Framework Core with SQLite for persistent storage.
+### 🚀 Backend (API)
+* **Smart Renewal Logic**: Automatically calculates and updates the next renewal date when a subscription's billing cycle changes.
+* **Flexible Billing Cycles**: Native support for **Weekly**, **Monthly**, and **Yearly** billing cycles with automated date math.
+* **Full CRUD Operations**: Create, Read, Update, and Delete subscriptions via a RESTful API.
+* **Persistent Storage**: Reliable data persistence using **SQLite** and **Entity Framework Core**.
+* **OpenAPI Integration**: Built-in Swagger UI for interactive API documentation and testing.
 
-## Technologies
+### 💻 Frontend (Client)
+* **Interactive Dashboard**: View all subscriptions in a clean, responsive table.
+* **Inline Editing**: Update subscription details (Name, Cost, Billing Cycle) directly within the list without navigating away.
+* **Quick Add**: Rapidly create new subscriptions using the integrated form row at the bottom of the list.
+* **Input Validation**: Client-side protection prevents empty names or negative costs from being submitted.
+* **Visual Feedback**: Real-time updates for costs and formatted renewal dates.
 
-* **Framework**: .NET 10.0
-* **Database**: SQLite (via `Microsoft.EntityFrameworkCore.Sqlite`)
-* **Documentation**: NSwag (`NSwag.AspNetCore`)
+## 🛠 Tech Stack
+
+### Server
+* **Framework**: .NET 10.0 (ASP.NET Core Minimal APIs)
+* **Database**: SQLite (`Microsoft.EntityFrameworkCore.Sqlite`)
 * **ORM**: Entity Framework Core
+* **Documentation**: NSwag / Swagger UI
 
-## Getting Started
+### Client
+* **Framework**: React 19
+* **Language**: TypeScript
+* **Build Tool**: Vite
+* **Styling**: CSS Modules / Standard CSS
+
+## 🚀 Getting Started
 
 ### Prerequisites
+* [.NET 10.0 SDK](https://dotnet.microsoft.com/download) or later
+* [Node.js](https://nodejs.org/) (version 18+ recommended)
 
-* .NET 10.0 SDK or later
+#### Linux
+On Arch Linux derivatives (Manjaro, endeavourOS, SteamOS), you will need to install .NET, along with the ASP.NET runtime and the Entity Framework tools. Install these with:
+```bash
+sudo pacman -S dotnet-sdk aspnet-targeting-pack aspnet-runtime
+dotnet tool install dotnet-ef
+```
 
-### Installation
+### Installation & Running
 
 1.  **Clone the repository**
     ```bash
     git clone [https://github.com/imran-salim/subtrack.git](https://github.com/imran-salim/subtrack.git)
-    cd subtrack
+    cd subtrack/
     ```
 
-2.  **Configuration**
-    The application uses `appsettings.json` for configuration. The default connection string points to a local SQLite database file named `SubTrack.db`.
-    ```json
-    "ConnectionStrings": {
-      "DefaultConnections": "Data Source=SubTrack.db"
-    }
-    ```
+2.  **Backend Setup**
+    The backend must be running for the client to fetch data.
+    
+    * **Restore dependencies and setup database:**
+        ```bash
+        dotnet restore
+        dotnet ef database update
+        ```
+    * **Run the API:**
+        ```bash
+        dotnet run
+        ```
+    * The API will start at `http://localhost:5123`.
 
-3.  **Database Setup**
-    The project includes an existing SQLite database file (`SubTrack.db`), but you can apply migrations to ensure the schema is up to date if you start fresh.
-    ```bash
-    dotnet ef database update
-    ```
+3.  **Client Setup**
+    Open a new terminal window and navigate to the `Client` directory.
 
-4.  **Run the Application**
-    ```bash
-    dotnet run
-    ```
-    The API will be available at `http://localhost:5123` or `https://localhost:7197` by default.
+    * **Install dependencies:**
+        ```bash
+        cd Client
+        npm install
+        ```
+    * **Run the development server:**
+        ```bash
+        npm run dev
+        ```
+    * The application will be available at `http://localhost:5173`.
 
-## API Endpoints
+## 📡 API Endpoints
 
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `GET` | `/` | Returns the API name ("SubTrack API"). |
-| `GET` | `/subs` | Retrieves a list of all subscriptions. |
-| `POST` | `/subs` | Creates a new subscription. Requires a JSON body (see below). |
-| `PUT` | `/subs/{id}` | Updates a subscription by its ID. Requires a JSON body. |
-| `DELETE`| `/subs/{id}` | Deletes a subscription by its ID. |
+The API is configured to allow CORS requests from `http://localhost:5173`.
 
-### Example Request (POST /subs)
+| Method | Endpoint       | Description                                                 |
+| :----- | :------------- | :---------------------------------------------------------- |
+| `GET`  | `/`            | Returns the API name ("SubTrack API").           |
+| `GET`  | `/subs`        | Retrieves a list of all subscriptions.           |
+| `GET`  | `/subs/{id}`   | Retrieves a single subscription by its ID.       |
+| `POST` | `/subs`        | Creates a new subscription with auto-calculated renewal. |
+| `PUT`  | `/subs/{id}`   | Updates a subscription (recalculates renewal if cycle changes). |
+| `DELETE`| `/subs/{id}`  | Deletes a subscription by its ID.                |
 
+### Data Models
+
+**Subscription Object**
 ```json
 {
+  "id": 1,
   "name": "Netflix",
   "cost": 15.99,
-  "cycle": 1
+  "cycle": 1,
+  "renewalDate": "2025-12-25T00:00:00"
 }
 ```
 

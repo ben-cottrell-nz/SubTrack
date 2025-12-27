@@ -3,7 +3,17 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SubscriptionDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnections")));
-// builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+var clientUrl = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? new string[] { "http://localhost:5173" };
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost", policy =>
+    {
+        policy.WithOrigins(clientUrl)
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApiDocument(config =>
@@ -26,40 +36,18 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// var subscriptions = new List<Subscription>
-// {
-//     new Subscription
-//     {
-//         Id = 1,
-//         Name = "Gym Membership",
-//         Cost = 22.1m,
-//         Cycle = Subscription.BillingCycle.Weekly,
-//         RenewalDate = DateTime.Now.AddDays(7)
-//     },
-//     new Subscription
-//     {
-//         Id = 2,
-//         Name = "Mobile Plan",
-//         Cost = 8.0m,
-//         Cycle = Subscription.BillingCycle.Monthly,
-//         RenewalDate = DateTime.Now.AddMonths(1)
-//     },
-//     new Subscription
-//     {
-//         Id = 3,
-//         Name = "Google Gemini",
-//         Cost = 37.0m,
-//         Cycle = Subscription.BillingCycle.Monthly,
-//         RenewalDate = DateTime.Now.AddMonths(1)
-//     },
-// };
+app.UseCors("AllowLocalhost");
 
 app.MapGet("/", () => "SubTrack API");
 
 app.MapGet("/subs", async (SubscriptionDbContext context) =>
 {
-    // return subscriptions;
     return await context.Subscriptions.ToListAsync();
+});
+
+app.MapGet("/subs/{id}", async (SubscriptionDbContext context, int id) => {
+    var sub = await context.Subscriptions.FindAsync(id);
+    return sub is not null ? Results.Ok(sub) : Results.NotFound();
 });
 
 app.MapPost("/subs", async (SubscriptionDbContext context, Subscription sub) =>
