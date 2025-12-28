@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Subscription from "./components/Subscription";
-import "./App.css";
 
 interface Subscription {
   id: number;
