@@ -16,7 +16,7 @@ A modern React frontend for the SubTrack application, designed to help users tra
 - **Framework**: React 19
 - **Language**: TypeScript
 - **Build Tool**: Vite 7
-- **Styling**: CSS Modules / Standard CSS
+- **Styling**: Tailwind CSS
 
 ## Prerequisites
 

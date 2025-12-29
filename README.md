@@ -30,7 +30,7 @@ SubTrack is a full-stack subscription tracking application designed to help user
 * **Framework**: React 19
 * **Language**: TypeScript
 * **Build Tool**: Vite
-* **Styling**: CSS Modules / Standard CSS
+* **Styling**: Tailwind CSS
 
 ## 🚀 Getting Started
 
@@ -49,7 +49,7 @@ dotnet tool install dotnet-ef
 
 1.  **Clone the repository**
     ```bash
-    git clone [https://github.com/imran-salim/subtrack.git](https://github.com/imran-salim/SubTrack.git)
+    git clone https://github.com/imran-salim/subtrack.git
     cd SubTrack/
     ```
 
